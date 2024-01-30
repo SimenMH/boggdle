@@ -1,0 +1,131 @@
+{
+  "A": {
+    "points": 1,
+    "frequency": 10
+  },
+
+  "B": {
+    "points": 4,
+    "frequency": 5
+  },
+
+  "C": {
+    "points": 5,
+    "frequency": 4
+  },
+
+  "D": {
+    "points": 3,
+    "frequency": 6
+  },
+
+  "E": {
+    "points": 1,
+    "frequency": 10
+  },
+
+  "F": {
+    "points": 5,
+    "frequency": 4
+  },
+
+  "G": {
+    "points": 3,
+    "frequency": 6
+  },
+
+  "H": {
+    "points": 4,
+    "frequency": 5
+  },
+
+  "I": {
+    "points": 1,
+    "frequency": 10
+  },
+
+  "J": {
+    "points": 7,
+    "frequency": 2
+  },
+
+  "K": {
+    "points": 6,
+    "frequency": 3
+  },
+
+  "L": {
+    "points": 3,
+    "frequency": 6
+  },
+
+  "M": {
+    "points": 4,
+    "frequency": 5
+  },
+
+  "N": {
+    "points": 2,
+    "frequency": 7
+  },
+
+  "O": {
+    "points": 1,
+    "frequency": 10
+  },
+
+  "P": {
+    "points": 4,
+    "frequency": 5
+  },
+
+  "Q": {
+    "points": 8,
+    "frequency": 1
+  },
+
+  "R": {
+    "points": 2,
+    "frequency": 7
+  },
+
+  "S": {
+    "points": 2,
+    "frequency": 7
+  },
+
+  "T": {
+    "points": 2,
+    "frequency": 7
+  },
+
+  "U": {
+    "points": 4,
+    "frequency": 5
+  },
+
+  "V": {
+    "points": 5,
+    "frequency": 4
+  },
+
+  "W": {
+    "points": 5,
+    "frequency": 4
+  },
+
+  "X": {
+    "points": 7,
+    "frequency": 2
+  },
+
+  "Y": {
+    "points": 4,
+    "frequency": 5
+  },
+
+  "Z": {
+    "points": 8,
+    "frequency": 1
+  }
+}
