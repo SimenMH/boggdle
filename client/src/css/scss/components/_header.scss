@@ -1,4 +1,5 @@
 header {
+  position: inherit;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -6,4 +7,27 @@ header {
   margin-bottom: 25px;
 
   height: 65px;
+  padding: 0 25px;
+
+  h1 {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
+      'Lucida Sans', Arial, sans-serif;
+    font-size: 3rem;
+    font-weight: bold;
+    position: absolute;
+  }
+
+  .Header {
+    &__Help {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+      margin-left: auto;
+      height: 100%;
+      width: 65px;
+      cursor: pointer;
+      user-select: none;
+    }
+  }
 }

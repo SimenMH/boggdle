@@ -1,0 +1,78 @@
+.Modal {
+  position: relative;
+  margin: auto;
+  top: 50%;
+  background-color: #121213;
+  padding: 32px;
+  border-radius: 8px;
+  border: 1px solid #1a1a1b;
+  width: 520px;
+  font-weight: 500;
+  outline: none;
+
+  h2 {
+    margin: 0;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-size: 28px;
+  }
+  h3 {
+    margin: 0;
+    margin-bottom: 10px;
+    font-weight: 500;
+    font-size: 20px;
+  }
+
+  &__Tutorial {
+    margin-bottom: 30px;
+    padding-right: 20px;
+    font-size: 16px;
+    padding-left: 20px;
+
+    li {
+      margin-bottom: 5px;
+      line-height: 20px;
+
+      &::marker {
+        font-size: 18px;
+      }
+    }
+  }
+
+  &__Close {
+    position: absolute;
+    right: 24px;
+    top: 24px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    &:before,
+    &:after {
+      position: absolute;
+      left: 10px;
+      content: ' ';
+      height: 24px;
+      width: 3px;
+      background-color: #f8f8f8;
+    }
+    &:before {
+      transform: rotate(45deg);
+    }
+    &:after {
+      transform: rotate(-45deg);
+    }
+  }
+
+  &__Overlay {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    min-height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 20;
+  }
+}
