@@ -1,6 +1,8 @@
+const url = 'https://boggdle.simenmh.com';
+
 // Gets table / Character values
 export const getTable = async () => {
-  const res = await fetch('http://localhost:5000/table');
+  const res = await fetch(url + '/table');
   const table = await res.json();
 
   return table;
@@ -8,7 +10,7 @@ export const getTable = async () => {
 
 // Submit Word / Get Score
 export const submitWord = async word => {
-  const res = await fetch('http://localhost:5000/word', {
+  const res = await fetch(url + '/word', {
     method: 'POST', // or 'PUT'
     headers: {
       'Content-Type': 'application/json',
@@ -22,7 +24,7 @@ export const submitWord = async word => {
 
 // Submit Final Score
 export const submitScore = async saveData => {
-  await fetch('http://localhost:5000/table', {
+  await fetch(url + '/table', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -33,7 +35,7 @@ export const submitScore = async saveData => {
 
 // Get Statistics
 export const getStatistics = async () => {
-  const res = await fetch('http://localhost:5000/stats');
+  const res = await fetch(url + '/stats');
   const statistics = await res.json();
 
   return statistics;

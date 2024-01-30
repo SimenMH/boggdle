@@ -153,9 +153,12 @@ function Board({ boardSize }) {
       // When mouse is released and we have selected tiles
       if (!gameEnded && !isPaused && !mouseDown && selectedTiles.length) {
         setIsPaused(true);
-        // TODO: Check if already guessed word
-        // If word is at least 2 characters long
-        if (currentWord.length >= 2) {
+        // If word is at least 2 characters long and is not already guessed
+        // TODO: Make more obvious that you it doesnt work because it's a duplicate
+        if (
+          currentWord.length >= 2 &&
+          !guessedWords.some(obj => obj.word === currentWord)
+        ) {
           const score = await submitWord(currentWord); // await
           if (score > 0) {
             // Set highlight CORRECT
@@ -223,6 +226,7 @@ function Board({ boardSize }) {
     resetTiles,
     table,
     gameEnded,
+    guessedWords,
   ]);
 
   // When selectedTiles changes, update selected tiles with Select highlight
