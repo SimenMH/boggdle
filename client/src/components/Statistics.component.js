@@ -47,7 +47,7 @@ function Statistics({ day }) {
         {statistics && (
           <>
             <div className='Statistics__StatsHeader'>
-              Today's highest scoring solution:
+              Today's best possible solution:
             </div>
             <div className='Statistics__Stats Statistics__HighestSolution'>
               {statistics.best.map(obj => {
