@@ -1,4 +1,5 @@
-const url = 'https://boggdle.simenmh.com';
+// const url = 'https://boggdle.simenmh.com';
+const url = 'http://localhost:5000';
 
 // Gets table / Character values
 export const getTable = async () => {

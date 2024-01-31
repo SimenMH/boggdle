@@ -36,6 +36,10 @@ function Board({ boardSize }) {
     setMouseDown((flags & 1) === 1);
   };
 
+  const setTouchState = state => {
+    setMouseDown(state);
+  };
+
   // Loads today's tiles
   const loadTiles = () => {
     if (table['characters'] && table['values']) {
@@ -84,8 +88,12 @@ function Board({ boardSize }) {
       setTable(newTable);
     }
     loadTable();
+
     document.addEventListener('mousedown', setMouseButtonState);
     document.addEventListener('mouseup', setMouseButtonState);
+
+    document.addEventListener('touchstart', () => setTouchState(true));
+    document.addEventListener('touchend', () => setTouchState(false));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Load save data and tiles once table is loaded
