@@ -30,14 +30,19 @@ function Board({ boardSize }) {
   const [isPaused, setIsPaused] = useState(false);
   const [gameEnded, setGameEnded] = useState(false);
   const [mouseDown, setMouseDown] = useState(false);
+  const [mouseJustPressed, setMouseJustPressed] = useState(false);
 
   const setMouseButtonState = e => {
     const flags = e.buttons !== undefined ? e.buttons : e.which;
-    setMouseDown((flags & 1) === 1);
+    const state = (flags & 1) === 1;
+
+    setMouseDown(state);
+    if (state) setMouseJustPressed(true);
   };
 
   const setTouchState = state => {
     setMouseDown(state);
+    if (state) setMouseJustPressed(true);
   };
 
   // Loads today's tiles
@@ -112,6 +117,11 @@ function Board({ boardSize }) {
   useEffect(() => {
     // When hovered tile changes
     if (!gameEnded && !isPaused && mouseDown && hoveredTile != null) {
+      // Reset tiles if starting a new tile
+      if (mouseJustPressed) {
+        setMouseJustPressed(false);
+        resetTiles();
+      }
       if (!selectedTiles.includes(hoveredTile)) {
         if (selectedTiles.length) {
           // Check for valid move
@@ -153,89 +163,82 @@ function Board({ boardSize }) {
     currentWord,
     isPaused,
     gameEnded,
+    mouseJustPressed,
+    resetTiles,
   ]);
 
   // Submit Word
-  useEffect(() => {
-    async function guessWord() {
-      // When mouse is released and we have selected tiles
-      if (!gameEnded && !isPaused && !mouseDown && selectedTiles.length) {
-        setIsPaused(true);
-        // If word is at least 2 characters long and is not already guessed
-        // TODO: Make more obvious that you it doesnt work because it's a duplicate
-        if (
-          currentWord.length >= 2 &&
-          !guessedWords.some(obj => obj.word === currentWord)
-        ) {
-          const score = await submitWord(currentWord); // await
-          if (score > 0) {
-            // Set highlight CORRECT
-            setTiles(prev => {
-              return prev.map(tile => {
-                if (selectedTiles.includes(tile.id)) {
-                  tile.highlight = TileColor.Correct;
-                }
-                return tile;
-              });
+  async function guessWord() {
+    // When mouse is released and we have selected tiles
+    if (!gameEnded && !isPaused && !mouseDown && selectedTiles.length) {
+      setIsPaused(true);
+      // If word is at least 2 characters long and is not already guessed
+      // TODO: Make more obvious that you it doesnt work because it's a duplicate
+      if (
+        currentWord.length >= 2 &&
+        !guessedWords.some(obj => obj.word === currentWord)
+      ) {
+        const score = await submitWord(currentWord); // await
+        if (score > 0) {
+          // Set highlight CORRECT
+          setTiles(prev => {
+            return prev.map(tile => {
+              if (selectedTiles.includes(tile.id)) {
+                tile.highlight = TileColor.Correct;
+              }
+              return tile;
             });
-          } else {
-            // Set highlight INCORRECT
-            setTiles(prev => {
-              return prev.map(tile => {
-                if (selectedTiles.includes(tile.id)) {
-                  tile.highlight = TileColor.Incorrect;
-                }
-                return tile;
-              });
-            });
-          }
-
-          setGuessedWords(prev => {
-            const newGuesses = [...prev];
-            newGuesses[guesses].word = currentWord;
-            newGuesses[guesses].points = score;
-
-            // Update words in local storage
-            const saveData = getSaveData(table['day']);
-            saveData['guesses'] = newGuesses;
-            updateSaveData(table['day'], saveData);
-
-            return newGuesses;
           });
-
-          // Update Score
-          setCurrentScore(prev => {
-            const newScore = prev + score;
-
-            // Update score in local storage
-            const saveData = getSaveData(table['day']);
-            saveData['score'] = newScore;
-            updateSaveData(table['day'], saveData);
-
-            return newScore;
-          });
-
-          setGuesses(prev => prev + 1);
-
-          // Reset tiles after X ms
-          setTimeout(resetTiles, 1000);
         } else {
-          resetTiles();
+          // Set highlight INCORRECT
+          setTiles(prev => {
+            return prev.map(tile => {
+              if (selectedTiles.includes(tile.id)) {
+                tile.highlight = TileColor.Incorrect;
+              }
+              return tile;
+            });
+          });
         }
+
+        setGuessedWords(prev => {
+          const newGuesses = [...prev];
+          newGuesses[guesses].word = currentWord;
+          newGuesses[guesses].points = score;
+
+          // Update words in local storage
+          const saveData = getSaveData(table['day']);
+          saveData['guesses'] = newGuesses;
+          updateSaveData(table['day'], saveData);
+
+          return newGuesses;
+        });
+
+        // Update Score
+        setCurrentScore(prev => {
+          const newScore = prev + score;
+
+          // Update score in local storage
+          const saveData = getSaveData(table['day']);
+          saveData['score'] = newScore;
+          updateSaveData(table['day'], saveData);
+
+          return newScore;
+        });
+
+        setGuesses(prev => prev + 1);
+
+        // Reset tiles after X ms
+        setTimeout(() => {
+          setIsPaused(false);
+          resetTiles();
+        }, 1000);
+      } else {
+        setIsPaused(false);
+        resetTiles();
       }
     }
-    guessWord();
-  }, [
-    mouseDown,
-    selectedTiles,
-    currentWord,
-    isPaused,
-    guesses,
-    resetTiles,
-    table,
-    gameEnded,
-    guessedWords,
-  ]);
+  }
 
   // When selectedTiles changes, update selected tiles with Select highlight
   useEffect(() => {
@@ -287,7 +290,7 @@ function Board({ boardSize }) {
       {gameEnded ? (
         <Statistics day={table['day']} />
       ) : (
-        <div className='WordBox'>
+        <div className='Board__WordBox'>
           {`${currentWord}`}{' '}
           {currentWordScore > 0 &&
             `(+${currentWordScore + (currentWord.length >= 6 ? 5 : 0)})`}
@@ -331,6 +334,16 @@ function Board({ boardSize }) {
           />
         ))}
       </div>
+
+      {!gameEnded && (
+        <button
+          className='Board__SubmitWordButton'
+          onClick={guessWord}
+          disabled={currentWord.length < 2 || isPaused || gameEnded}
+        >
+          Submit
+        </button>
+      )}
 
       {guessedWords.length > 0 && (
         <div className='Board__Guesses'>
