@@ -46,15 +46,22 @@ function App() {
             on the letters you select.
           </li>
           <li>
+            Invalid words will be considered as a guess with a score of 0
+            points.
+          </li>
+          <li>
             Words with a length of 6 letters or more earn an extra 5 points. Use
             longer words to boost your score.
           </li>
           <li>
-            Your final score is the sum of points from all three attempts.{' '}
+            Your final score is the sum of points from all three attempts.
           </li>
         </ul>
 
-        <p>A new board is released daily at midnight (UTC).</p>
+        <p>
+          A new board is released daily at midnight (UTC). The game uses an
+          American-English dictionary
+        </p>
       </Modal>
       <Header openHelpModal={() => openHelpModal()} />
       <Board boardSize={boardSize} />
