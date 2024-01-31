@@ -68,7 +68,7 @@ const getStatistics = asyncHandler(async (req, res) => {
     .slice(0, 10)
     .map(s => ({ word: s.word, points: s.points }));
 
-  const average = scores.reduce((a, b) => a + b, 0) / scores.length;
+  const average = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
 
   res.status(200).json({ best, popular, average });
 });
