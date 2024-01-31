@@ -32,6 +32,11 @@ export const generateTable = async () => {
   }
 
   const day = await getDay();
+
+  if (day === '#1') {
+    tableString = 'GREYLHOCTRUANHOLMOEPBZFME';
+  }
+
   await Table.findOneAndDelete({ Day: day });
   const table = await Table.create({ Day: day, Characters: tableString });
 
