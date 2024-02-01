@@ -9,7 +9,7 @@ import boggle from 'node-boggle-solver';
 const defaultSolver = boggle(WordList);
 
 const tableSize = 25;
-const MIN_SOLUTIONS = 250;
+const MIN_SOLUTIONS = 350;
 
 export const generateTable = async () => {
   const characters = await getCharacters();
