@@ -3,17 +3,12 @@ import Modal from 'react-modal';
 
 import Board from './components/Board.component';
 import Header from './components/Header.component';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const boardSize = 25;
 
 function App() {
   const [showHelpModal, setShowHelpModal] = useState(true);
-
-  // If invalid board size
-  if (Math.sqrt(boardSize) % 1 !== 0) {
-    return <div>Square root of board size must be a whole number</div>;
-  }
 
   const openHelpModal = () => {
     setShowHelpModal(true);
@@ -23,6 +18,10 @@ function App() {
     setShowHelpModal(false);
   };
 
+  // If invalid board size
+  if (Math.sqrt(boardSize) % 1 !== 0) {
+    return <div>Square root of board size must be a whole number</div>;
+  }
   return (
     <>
       <Modal
@@ -32,6 +31,7 @@ function App() {
         onRequestClose={closeHelpModal}
         shouldCloseOnOverlayClick={true}
         contentLabel='Help Modal'
+        appElement={document.getElementById('root')}
       >
         <h2>How To Play</h2>
         <h3>Find the highest scoring words on the grid in 3 guesses</h3>
