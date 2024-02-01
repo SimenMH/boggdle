@@ -8,7 +8,34 @@ import boggle from 'node-boggle-solver';
 
 const defaultSolver = boggle(WordList);
 
-const tableSize = 25;
+const letterConfig = [
+  ['A', 'A', 'A', 'F', 'R', 'S'],
+  ['A', 'A', 'E', 'E', 'E', 'E'],
+  ['A', 'A', 'F', 'I', 'R', 'S'],
+  ['A', 'D', 'E', 'N', 'N', 'N'],
+  ['A', 'E', 'E', 'E', 'E', 'M'],
+  ['A', 'E', 'E', 'G', 'M', 'U'],
+  ['A', 'E', 'G', 'M', 'N', 'N'],
+  ['A', 'F', 'I', 'R', 'S', 'Y'],
+  ['B', 'J', 'K', 'Q', 'X', 'Z'],
+  ['C', 'C', 'E', 'N', 'S', 'T'],
+  ['C', 'E', 'I', 'I', 'L', 'T'],
+  ['C', 'E', 'I', 'L', 'P', 'T'],
+  ['C', 'E', 'I', 'P', 'S', 'T'],
+  ['D', 'D', 'H', 'N', 'O', 'T'],
+  ['D', 'H', 'H', 'L', 'O', 'R'],
+  ['D', 'H', 'L', 'N', 'O', 'R'],
+  ['D', 'H', 'L', 'N', 'O', 'R'],
+  ['E', 'I', 'I', 'I', 'T', 'T'],
+  ['E', 'M', 'O', 'T', 'T', 'T'],
+  ['E', 'N', 'S', 'S', 'S', 'U'],
+  ['F', 'I', 'P', 'R', 'S', 'Y'],
+  ['G', 'O', 'R', 'R', 'V', 'W'],
+  ['I', 'P', 'R', 'R', 'R', 'Y'],
+  ['N', 'O', 'O', 'T', 'U', 'W'],
+  ['O', 'O', 'O', 'T', 'T', 'U'],
+];
+
 const MIN_SOLUTIONS = 350;
 
 export const generateTable = async () => {
@@ -22,21 +49,16 @@ export const generateTable = async () => {
     }
   }
 
+  const shuffledLetters = shuffle([...letterConfig]);
+
   // Generate daily string
   let tableString = '';
-  for (let i = 0; i < tableSize; i++) {
-    tableString += characterArr.splice(
-      Math.floor(Math.random() * characterArr.length),
-      1
-    );
+  for (let i = 0; i < shuffledLetters.length; i++) {
+    const letterArr = shuffledLetters[i];
+    tableString += letterArr[Math.floor(Math.random() * letterArr.length)];
   }
 
   const day = await getDay();
-
-  if (day === '#1') {
-    tableString = 'GREYLHOCTRUANHOLMOEPBZFME';
-  }
-
   await Table.findOneAndDelete({ Day: day });
   const table = await Table.create({ Day: day, Characters: tableString });
 
@@ -62,4 +84,12 @@ export const generateTable = async () => {
       await Solutions.create({ Day: day, Solutions: solutions });
     }
   });
+};
+
+const shuffle = array => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
 };
