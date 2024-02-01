@@ -7,6 +7,11 @@ export const getDay = async () => {
   return `#${config.Day}`;
 };
 
+export const getNextDay = async () => {
+  let config = await Config.findOne({});
+  return `#${config.Day + 1}`;
+};
+
 export const getCharacters = async () => {
   let config = await Config.findOne({});
   return config.Characters;
@@ -26,6 +31,6 @@ export const initConfig = async () => {
       Characters: Characters,
     });
 
-    await generateTable();
+    await generateTable(newConfig.Day);
   }
 };

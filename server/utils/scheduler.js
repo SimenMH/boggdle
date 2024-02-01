@@ -1,5 +1,5 @@
 import schedule from 'node-schedule';
-import { updateDay } from './config.js';
+import { updateDay, getNextDay } from './config.js';
 import { generateTable } from './generateTable.js';
 
 const rule = new schedule.RecurrenceRule();
@@ -11,7 +11,8 @@ const init = () => {
   schedule.scheduleJob(rule, async () => {
     console.log('Updating day! Yippie! 🚀');
     await updateDay();
-    await generateTable();
+    const nextDay = await getNextDay();
+    await generateTable(nextDay);
   });
   console.log('Initialized scheduler');
 };

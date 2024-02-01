@@ -1,4 +1,4 @@
-import { getDay, getCharacters } from './config.js';
+import { getNextDay, getCharacters } from './config.js';
 
 import Table from '../models/tableModel.js';
 import Solutions from '../models/solutionsModel.js';
@@ -38,7 +38,7 @@ const letterConfig = [
 
 const MIN_SOLUTIONS = 350;
 
-export const generateTable = async () => {
+export const generateTable = async day => {
   const characters = await getCharacters();
 
   let characterArr = [];
@@ -58,7 +58,6 @@ export const generateTable = async () => {
     tableString += letterArr[Math.floor(Math.random() * letterArr.length)];
   }
 
-  const day = await getDay();
   await Table.findOneAndDelete({ Day: day });
   const table = await Table.create({ Day: day, Characters: tableString });
 
@@ -78,7 +77,7 @@ export const generateTable = async () => {
     solutions.sort((a, b) => b.points - a.points);
 
     if (solutions.length < MIN_SOLUTIONS) {
-      generateTable();
+      generateTable(day);
     } else {
       await Solutions.findOneAndDelete({ Day: day });
       await Solutions.create({ Day: day, Solutions: solutions });
