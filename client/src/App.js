@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 
 import Board from './components/Board.component';
 import Header from './components/Header.component';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const boardSize = 25;
 
