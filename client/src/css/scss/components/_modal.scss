@@ -10,6 +10,12 @@
   font-weight: 500;
   outline: none;
 
+  &__Copyright {
+    max-height: 90vh;
+    overflow: auto;
+    font-size: 12px;
+  }
+
   h2 {
     margin: 0;
     margin-top: 20px;
@@ -21,6 +27,20 @@
     margin-bottom: 10px;
     font-weight: 500;
     font-size: 20px;
+  }
+
+  &__Help {
+    p {
+      font-size: 14px;
+      margin: 0;
+      margin-bottom: 5px;
+    }
+  }
+
+  &__CopyrightButton {
+    text-decoration: underline;
+    color: #83a3bd;
+    cursor: pointer;
   }
 
   &__Tutorial {
