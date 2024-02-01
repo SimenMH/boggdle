@@ -69,9 +69,20 @@ function App() {
 
         <p>A new board is released daily at midnight (UTC).</p>
         <p>
+          For feedback, bug reports, or other inquiries,{' '}
+          <a
+            className='Modal__Link'
+            href='https://simenmh.com/contact'
+            target='_blank'
+            rel='noreferrer noopener'
+          >
+            contact me here.
+          </a>
+        </p>
+        <p>
           The game uses a modified version of the{' '}
           <span
-            className='Modal__CopyrightButton'
+            className='Modal__Link'
             onClick={() => {
               closeHelpModal();
               openCopyrightModal();
