@@ -5,17 +5,16 @@ import {
   submitScore,
   submitWord,
 } from './controllers/tableController.js';
-// import { generateTable } from './utils/generateTable.js';
+import { adminAuth } from './middleware/adminAuth.js';
+import { regenNextTable, regenTable } from './controllers/adminController.js';
 
 const router = express.Router();
-
-// router.get('/', (req, res) => {
-//   generateTable();
-//   res.send('hello world');
-// });
 
 router.route('/table').get(getTable).post(submitScore);
 router.route('/word').post(submitWord);
 router.route('/stats').get(getStatistics);
+
+router.route('/admin/regen').all(adminAuth).put(regenTable);
+router.route('/admin/regenNextTable').all(adminAuth).put(regenNextTable);
 
 export default router;
