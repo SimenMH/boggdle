@@ -3,7 +3,7 @@ import { getNextDay, getCharacters } from './config.js';
 import Table from '../models/tableModel.js';
 import Solutions from '../models/solutionsModel.js';
 
-import WordList from '../data/wordlist.json' assert { type: 'json' };
+import WordList from '../data/filteredWords.json' assert { type: 'json' };
 import boggle from 'node-boggle-solver';
 
 const defaultSolver = boggle(WordList);
