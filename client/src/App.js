@@ -90,7 +90,17 @@ function App() {
             }}
           >
             SCOWL Wordlist
-          </span>
+          </span>{' '}
+          as well as{' '}
+          <a
+            className='Modal__Link'
+            href='https://dictionaryapi.dev/'
+            target='_blank'
+            rel='noreferrer noopener'
+          >
+            dictionaryapi.dev
+          </a>{' '}
+          for word validation
         </p>
       </Modal>
       <Modal

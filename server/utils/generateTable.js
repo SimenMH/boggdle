@@ -1,10 +1,12 @@
-import { getNextDay, getCharacters } from './config.js';
+import fs from 'fs';
+import boggle from 'node-boggle-solver';
+
+import { getDay, getNextDay, getCharacters } from './config.js';
 
 import Table from '../models/tableModel.js';
 import Solutions from '../models/solutionsModel.js';
 
 import WordList from '../data/filteredWords.json' assert { type: 'json' };
-import boggle from 'node-boggle-solver';
 
 const defaultSolver = boggle(WordList);
 
@@ -91,4 +93,53 @@ const shuffle = array => {
     [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
+};
+
+export const addWord = async word => {
+  const day = await getDay();
+  const solutions = await Solutions.findOne({ Day: day });
+  if (!solutions) {
+    throw new Error('Could not find solutions for today');
+  }
+
+  word = word.toUpperCase().trim();
+
+  const wordExists = solutions.Solutions.find(s => s.word === word);
+  if (wordExists) {
+    throw new Error('Word already exists in solutions');
+  }
+
+  let points = await getWordScore(word);
+
+  solutions.Solutions.push({ word, points });
+  await solutions.save();
+
+  const wordListJson = await fs.promises.readFile(
+    './data/wordlist.json',
+    'utf-8'
+  ); // Specify encoding as an option
+  const wordList = JSON.parse(wordListJson);
+  wordList.push(word);
+  fs.writeFileSync('./data/wordlist.json', JSON.stringify(wordList, null, 2));
+
+  const filteredWordListJson = await fs.promises.readFile(
+    './data/filteredWords.json',
+    'utf-8'
+  ); // Specify encoding as an option
+  const filteredWordList = JSON.parse(filteredWordListJson);
+  filteredWordList.push(word);
+  fs.writeFileSync(
+    './data/filteredWords.json',
+    JSON.stringify(filteredWordList, null, 2)
+  );
+};
+
+export const getWordScore = async word => {
+  const characters = await getCharacters();
+  let points = 0;
+  for (let i = 0; i < word.length; i++) {
+    points += characters[word[i]].value;
+  }
+  if (word.length >= 6) points += 5;
+  return points;
 };

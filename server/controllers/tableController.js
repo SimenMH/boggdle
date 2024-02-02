@@ -3,6 +3,8 @@ import { getCharacters, getDay } from '../utils/config.js';
 
 import Table from '../models/tableModel.js';
 import Solutions from '../models/solutionsModel.js';
+import { findWord } from '../utils/dictionaryApi.js';
+import { addWord } from '../utils/generateTable.js';
 
 const getTable = asyncHandler(async (req, res) => {
   const table = await getTodaysTable();
@@ -20,13 +22,22 @@ const submitWord = asyncHandler(async (req, res) => {
   const { word } = req.body;
 
   const day = await getDay();
-  const solutions = await Solutions.findOne({ Day: day });
-  const solution = solutions.Solutions.find(s => s.word === word);
+  let solutions = await Solutions.findOne({ Day: day });
+  let solution = solutions.Solutions.find(s => s.word === word);
+
+  if (!solution) {
+    const foundWord = await findWord(word);
+    if (foundWord) {
+      await addWord(word);
+      solutions = await Solutions.findOne({ Day: day });
+      solution = solutions.Solutions.find(s => s.word === word);
+    }
+  }
 
   if (solution) {
     // Add count to usages of solution
     solution.usages = solution.usages + 1;
-    solutions.save();
+    await solutions.save();
 
     res.status(200).json(solution.points);
   } else {
@@ -48,7 +59,7 @@ const submitScore = asyncHandler(async (req, res) => {
   // Add score to table
   const table = await getTodaysTable();
   table.Scores.push(score);
-  table.save();
+  await table.save();
 
   res.sendStatus(201);
 });
@@ -82,8 +93,6 @@ const validateWord = async word => {
   const day = await getDay();
   const solutions = await Solutions.findOne({ Day: day });
   const solution = solutions.Solutions.find(s => s.word === word);
-
-  // check dictionaryapi and if found add to wordlist and solutions
   return solution;
 };
 

@@ -193,7 +193,17 @@ function Board({ boardSize }) {
     if (!gameEnded && !isPaused && !mouseDown && selectedTiles.length) {
       setIsPaused(true);
       // If word is at least 2 characters long and is not already guessed
-      // TODO: Make more obvious that you it doesnt work because it's a duplicate
+
+      // Set highlight DISABLED
+      setTiles(prev => {
+        return prev.map(tile => {
+          if (selectedTiles.includes(tile.id)) {
+            tile.highlight = TileColor.Disabled;
+          }
+          return tile;
+        });
+      });
+
       if (
         currentWord.length >= 2 &&
         !guessedWords.some(obj => obj.word === currentWord)
@@ -263,16 +273,6 @@ function Board({ boardSize }) {
           resetTiles();
         }, 1000);
       } else {
-        // Set highlight DISABLED
-        setTiles(prev => {
-          return prev.map(tile => {
-            if (selectedTiles.includes(tile.id)) {
-              tile.highlight = TileColor.Disabled;
-            }
-            return tile;
-          });
-        });
-
         // Reset tiles after X ms
         setTimeout(() => {
           setIsPaused(false);

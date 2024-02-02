@@ -59,7 +59,7 @@ const addWord = asyncHandler(async (req, res) => {
 
   solutions.Solutions.push({ word, points });
 
-  solutions.save();
+  await solutions.save();
   res.sendStatus(200);
 });
 
@@ -79,7 +79,7 @@ const removeWord = asyncHandler(async (req, res) => {
   if (wordExists) {
     const index = solutions.Solutions.indexOf(wordExists);
     solutions.Solutions.splice(index, 1);
-    solutions.save();
+    await solutions.save();
     res.sendStatus(200);
   } else {
     res.status(404);
