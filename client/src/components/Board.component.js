@@ -120,8 +120,8 @@ function Board({ boardSize }) {
   const renderLives = () => {
     const livesArr = ['♡', '♡', '♡'];
 
-    for (let i = 0; i < lives; i++) {
-      livesArr[i] = '❤︎';
+    for (let i = 0; i < livesArr.length; i++) {
+      if (i < lives) livesArr[i] = '❤︎';
     }
 
     return livesArr;
