@@ -65,9 +65,7 @@ function App() {
             At zero lives, invalid words will be treated as guesses with a score
             of 0 points.
           </li>
-          <li>
-            Your final score is the sum of points from all three attempts.
-          </li>
+          <li>Your final score is the sum of points from all three guesses.</li>
         </ul>
 
         <p>A new board is released daily at midnight (UTC).</p>

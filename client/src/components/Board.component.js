@@ -263,8 +263,21 @@ function Board({ boardSize }) {
           resetTiles();
         }, 1000);
       } else {
-        setIsPaused(false);
-        resetTiles();
+        // Set highlight DISABLED
+        setTiles(prev => {
+          return prev.map(tile => {
+            if (selectedTiles.includes(tile.id)) {
+              tile.highlight = TileColor.Disabled;
+            }
+            return tile;
+          });
+        });
+
+        // Reset tiles after X ms
+        setTimeout(() => {
+          setIsPaused(false);
+          resetTiles();
+        }, 1000);
       }
     }
   }
