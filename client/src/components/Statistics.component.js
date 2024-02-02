@@ -19,6 +19,11 @@ function Statistics({ day, gameEnded }) {
     loadStats();
   }, [day, gameEnded]);
 
+  const copyReultToClipboard = () => {
+    const text = `Boggdle ${day}\n\nScore: ${saveData['score']}\n1. ${saveData['guesses'][0]['word']} (+${saveData['guesses'][0]['points']})\n2. ${saveData['guesses'][1]['word']} (+${saveData['guesses'][1]['points']})\n3. ${saveData['guesses'][2]['word']} (+${saveData['guesses'][2]['points']})\n\nhttps://simenmh.com/boggdle`;
+    navigator.clipboard.writeText(text);
+  };
+
   return (
     <>
       <div className='Statistics'>
@@ -30,12 +35,26 @@ function Statistics({ day, gameEnded }) {
                 Well done! Your final score is: <span>{saveData['score']}</span>
               </div>
             )}
+
+            {/* COPY TO CLIPBOARD */}
+            <div className='Statistics__ButtonContainer'>
+              <div
+                className='Statistics__Button'
+                onClick={copyReultToClipboard}
+              >
+                Copy Results to Clipboard
+              </div>
+            </div>
+
+            <div className='Statistics__Separator' />
+
             {/* HIGH SCORE */}
             {highScores && highScores['score'] !== 0 && (
               <div className='Statistics__HighScore'>
                 Your all-time highest score: <span>{highScores['score']}</span>
               </div>
             )}
+
             {/* BEST WORD */}
             {highScores && highScores['word']['word'] && (
               <div className='Statistics__HighScore'>
@@ -52,6 +71,8 @@ function Statistics({ day, gameEnded }) {
           <>
             {gameEnded && (
               <>
+                <div className='Statistics__Separator' />
+
                 <div className='Statistics__StatsHeader'>
                   Today's best possible solution:
                 </div>
@@ -64,6 +85,9 @@ function Statistics({ day, gameEnded }) {
                     );
                   })}
                 </div>
+
+                <div className='Statistics__Separator' />
+
                 <div className='Statistics__StatsHeader'>
                   Today's most popular words:
                 </div>
@@ -76,11 +100,15 @@ function Statistics({ day, gameEnded }) {
                     );
                   })}
                 </div>
+
+                <div className='Statistics__Separator' />
               </>
             )}
             <div className='Statistics__StatsHeader'>
               Today's average score: <span>{statistics.average}</span>
             </div>
+
+            <div className='Statistics__Separator' />
           </>
         )}
       </div>
