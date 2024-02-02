@@ -82,6 +82,8 @@ const validateWord = async word => {
   const day = await getDay();
   const solutions = await Solutions.findOne({ Day: day });
   const solution = solutions.Solutions.find(s => s.word === word);
+
+  // check dictionaryapi and if found add to wordlist and solutions
   return solution;
 };
 

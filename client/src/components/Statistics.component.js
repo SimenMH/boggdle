@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { getStatistics } from '../api/boggdleAPI';
 import { getHighScores, getSaveData } from '../utils/localStorage';
 
-function Statistics({ day }) {
+function Statistics({ day, gameEnded }) {
   const [statistics, setStatistics] = useState(null);
   const [saveData, setSaveData] = useState(null);
   const [highScores, setHighScores] = useState(null);
@@ -17,59 +17,67 @@ function Statistics({ day }) {
       setHighScores(newHighScores);
     }
     loadStats();
-  }, [day]);
+  }, [day, gameEnded]);
 
   return (
     <>
       <div className='Statistics'>
-        {/* FINAL SCORE */}
-        {saveData && (
-          <div className='Statistics__FinalScore'>
-            Well done! Your final score is: <span>{saveData['score']}</span>
-          </div>
-        )}
-        {/* HIGH SCORE */}
-        {highScores && highScores['score'] !== 0 && (
-          <div className='Statistics__HighScore'>
-            Your all-time highest score: <span>{highScores['score']}</span>
-          </div>
-        )}
-        {/* BEST WORD */}
-        {highScores && highScores['word']['word'] && (
-          <div className='Statistics__HighScore'>
-            Your all-time highest scoring word:{' '}
-            <span>
-              {`${highScores['word']['word']} (+${highScores['word']['points']})`}
-            </span>
-          </div>
+        {gameEnded && (
+          <>
+            {/* FINAL SCORE */}
+            {saveData && (
+              <div className='Statistics__FinalScore'>
+                Well done! Your final score is: <span>{saveData['score']}</span>
+              </div>
+            )}
+            {/* HIGH SCORE */}
+            {highScores && highScores['score'] !== 0 && (
+              <div className='Statistics__HighScore'>
+                Your all-time highest score: <span>{highScores['score']}</span>
+              </div>
+            )}
+            {/* BEST WORD */}
+            {highScores && highScores['word']['word'] && (
+              <div className='Statistics__HighScore'>
+                Your all-time highest scoring word:{' '}
+                <span>
+                  {`${highScores['word']['word']} (+${highScores['word']['points']})`}
+                </span>
+              </div>
+            )}
+          </>
         )}
         {/* STATISTICS */}
         {statistics && (
           <>
-            <div className='Statistics__StatsHeader'>
-              Today's best possible solution:
-            </div>
-            <div className='Statistics__Stats Statistics__HighestSolution'>
-              {statistics.best.map(obj => {
-                return (
-                  <p key={obj.word}>
-                    {obj.word} (+{obj.points})
-                  </p>
-                );
-              })}
-            </div>
-            <div className='Statistics__StatsHeader'>
-              Today's most popular words:
-            </div>
-            <div className='Statistics__Stats Statistics__MostPopular'>
-              {statistics.popular.map((obj, idx) => {
-                return (
-                  <p key={obj.word}>
-                    {idx + 1}. {obj.word} (+{obj.points})
-                  </p>
-                );
-              })}
-            </div>
+            {gameEnded && (
+              <>
+                <div className='Statistics__StatsHeader'>
+                  Today's best possible solution:
+                </div>
+                <div className='Statistics__Stats Statistics__HighestSolution'>
+                  {statistics.best.map(obj => {
+                    return (
+                      <p key={obj.word}>
+                        {obj.word} (+{obj.points})
+                      </p>
+                    );
+                  })}
+                </div>
+                <div className='Statistics__StatsHeader'>
+                  Today's most popular words:
+                </div>
+                <div className='Statistics__Stats Statistics__MostPopular'>
+                  {statistics.popular.map((obj, idx) => {
+                    return (
+                      <p key={obj.word}>
+                        {idx + 1}. {obj.word} (+{obj.points})
+                      </p>
+                    );
+                  })}
+                </div>
+              </>
+            )}
             <div className='Statistics__StatsHeader'>
               Today's average score: <span>{statistics.average}</span>
             </div>

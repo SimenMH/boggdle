@@ -329,7 +329,7 @@ function Board({ boardSize }) {
 
   return (
     <div className='Board'>
-      {gameEnded && <Statistics day={table['day']} />}
+      <Statistics day={table['day']} gameEnded={gameEnded} />
 
       <div className='Board__TopContainer'>
         <div className='Board__Lives'>{renderLives()}</div>
