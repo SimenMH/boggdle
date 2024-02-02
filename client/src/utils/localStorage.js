@@ -16,6 +16,7 @@ export const getSaveData = day => {
           points: 0,
         },
       ],
+      lives: 3,
       score: 0,
       submitted: false,
     };
@@ -139,4 +140,10 @@ const validateHighScores = highScores => {
     typeof highScores['word']['points'] === 'number';
 
   return validFields && validTypes && validWordFields && validWordTypes;
+};
+
+export const addLivesToSaveData = day => {
+  const saveData = getSaveData(day);
+  saveData['lives'] = 3;
+  updateSaveData(day, saveData);
 };

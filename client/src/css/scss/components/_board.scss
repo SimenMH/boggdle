@@ -3,6 +3,13 @@
   margin: auto;
   margin-bottom: 100px;
 
+  &__TopContainer {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 30px;
+    margin-bottom: 5px;
+  }
+
   &__WordBox {
     display: flex;
     justify-content: center;

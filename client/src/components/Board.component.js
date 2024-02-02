@@ -4,6 +4,7 @@ import {
   getSaveData,
   updateHighScores,
   updateSaveData,
+  addLivesToSaveData,
 } from '../utils/localStorage';
 
 import Tile from './Tile.component';
@@ -31,6 +32,8 @@ function Board({ boardSize }) {
   const [gameEnded, setGameEnded] = useState(false);
   const [mouseDown, setMouseDown] = useState(false);
   const [mouseJustPressed, setMouseJustPressed] = useState(false);
+
+  const [lives, setLives] = useState(3);
 
   const setMouseButtonState = e => {
     const flags = e.buttons !== undefined ? e.buttons : e.which;
@@ -75,8 +78,15 @@ function Board({ boardSize }) {
   const loadSaveData = () => {
     if (table['day']) {
       const saveData = getSaveData(table['day']);
+
+      if (!saveData.hasOwnProperty('lives')) {
+        addLivesToSaveData(table['day']);
+        saveData['lives'] = 3;
+      }
+
       setGuessedWords(saveData['guesses']);
       setCurrentScore(saveData['score']);
+      setLives(saveData['lives']);
 
       let usedGuesses = 0;
       for (let i = 0; i < saveData['guesses'].length; i++) {
@@ -106,6 +116,16 @@ function Board({ boardSize }) {
     loadSaveData();
     loadTiles();
   }, [table]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const renderLives = () => {
+    const livesArr = ['♡', '♡', '♡'];
+
+    for (let i = 0; i < lives; i++) {
+      livesArr[i] = '❤︎';
+    }
+
+    return livesArr;
+  };
 
   const resetTiles = useCallback(() => {
     setIsPaused(false);
@@ -201,32 +221,41 @@ function Board({ boardSize }) {
           });
         }
 
-        setGuessedWords(prev => {
-          const newGuesses = [...prev];
-          newGuesses[guesses].word = currentWord;
-          newGuesses[guesses].points = score;
+        if (lives <= 0 || score > 0) {
+          // If no lives or score is higher than 0
+          setGuessedWords(prev => {
+            const newGuesses = [...prev];
+            newGuesses[guesses].word = currentWord;
+            newGuesses[guesses].points = score;
 
-          // Update words in local storage
+            // Update words in local storage
+            const saveData = getSaveData(table['day']);
+            saveData['guesses'] = newGuesses;
+            updateSaveData(table['day'], saveData);
+
+            return newGuesses;
+          });
+
+          // Update Score
+          setCurrentScore(prev => {
+            const newScore = prev + score;
+
+            // Update score in local storage
+            const saveData = getSaveData(table['day']);
+            saveData['score'] = newScore;
+            updateSaveData(table['day'], saveData);
+
+            return newScore;
+          });
+
+          setGuesses(prev => prev + 1);
+        } else {
+          // Remove a life
+          setLives(prev => prev - 1);
           const saveData = getSaveData(table['day']);
-          saveData['guesses'] = newGuesses;
+          saveData['lives'] = saveData['lives'] - 1;
           updateSaveData(table['day'], saveData);
-
-          return newGuesses;
-        });
-
-        // Update Score
-        setCurrentScore(prev => {
-          const newScore = prev + score;
-
-          // Update score in local storage
-          const saveData = getSaveData(table['day']);
-          saveData['score'] = newScore;
-          updateSaveData(table['day'], saveData);
-
-          return newScore;
-        });
-
-        setGuesses(prev => prev + 1);
+        }
 
         // Reset tiles after X ms
         setTimeout(() => {
@@ -287,15 +316,21 @@ function Board({ boardSize }) {
 
   return (
     <div className='Board'>
-      {gameEnded ? (
-        <Statistics day={table['day']} />
-      ) : (
+      {gameEnded && <Statistics day={table['day']} />}
+
+      <div className='Board__TopContainer'>
+        <div className='Board__Lives'>{renderLives()}</div>
+        <div>{table.day}</div>
+      </div>
+
+      {!gameEnded && (
         <div className='Board__WordBox'>
           {`${currentWord}`}{' '}
           {currentWordScore > 0 &&
             `(+${currentWordScore + (currentWord.length >= 6 ? 5 : 0)})`}
         </div>
       )}
+
       <div className='Board__TileContainer'>
         <svg>
           {selectedTiles.length > 1 &&
