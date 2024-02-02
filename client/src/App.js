@@ -55,16 +55,15 @@ function App() {
             on the letters you select.
           </li>
           <li>
+            Words with a length of 6 letters or more earn an extra 5 points.
+          </li>
+          <li>
             Begin the game with three lives. Invalid guesses will result in the
             deduction of one life.
           </li>
           <li>
             At zero lives, invalid words will be treated as guesses with a score
             of 0 points.
-          </li>
-          <li>
-            Words with a length of 6 letters or more earn an extra 5 points. Use
-            longer words to boost your score.
           </li>
           <li>
             Your final score is the sum of points from all three attempts.
