@@ -6,7 +6,13 @@ import {
   submitWord,
 } from './controllers/tableController.js';
 import { adminAuth } from './middleware/adminAuth.js';
-import { regenNextTable, regenTable } from './controllers/adminController.js';
+import {
+  regenNextTable,
+  regenTable,
+  addWord,
+  removeWord,
+  getUsedWords,
+} from './controllers/adminController.js';
 
 const router = express.Router();
 
@@ -16,5 +22,8 @@ router.route('/stats').get(getStatistics);
 
 router.route('/admin/regen').all(adminAuth).put(regenTable);
 router.route('/admin/regenNextTable').all(adminAuth).put(regenNextTable);
+router.route('/admin/addWord').all(adminAuth).put(addWord);
+router.route('/admin/removeWord').all(adminAuth).delete(removeWord);
+router.route('/admin/getUsedWords').all(adminAuth).get(getUsedWords);
 
 export default router;
