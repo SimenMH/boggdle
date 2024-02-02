@@ -2,11 +2,9 @@ const PASSWORD = 'abc123';
 
 // Check password
 export const adminAuth = (req, res, next) => {
-  const { password } = req.body;
+  const { pass } = req.headers;
 
-  console.log(password);
-
-  if (password !== PASSWORD) {
+  if (pass !== PASSWORD) {
     res.status(401);
     throw new Error('Unauthorized');
   }
