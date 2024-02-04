@@ -20,7 +20,7 @@ function Statistics({ day, gameEnded }) {
   }, [day, gameEnded]);
 
   const copyReultToClipboard = () => {
-    const text = `Boggdle ${day}\n\nScore: ${saveData['score']}\n1. ${saveData['guesses'][0]['word']} (+${saveData['guesses'][0]['points']})\n2. ${saveData['guesses'][1]['word']} (+${saveData['guesses'][1]['points']})\n3. ${saveData['guesses'][2]['word']} (+${saveData['guesses'][2]['points']})\n\nhttps://simenmh.com/boggdle`;
+    const text = `Boggdle ${day}\nhttps://simenmh.com/boggdle\n\nScore: ${saveData['score']}\n1. ${saveData['guesses'][0]['word']} (+${saveData['guesses'][0]['points']})\n2. ${saveData['guesses'][1]['word']} (+${saveData['guesses'][1]['points']})\n3. ${saveData['guesses'][2]['word']} (+${saveData['guesses'][2]['points']})`;
     navigator.clipboard.writeText(text);
   };
 
