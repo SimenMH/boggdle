@@ -139,12 +139,12 @@ function Statistics({ day, gameEnded }) {
             <div className='Statistics__Separator' />
 
             <div className='Statistics__StatsHeader'>
-              Today's average score:{' '}
-              <span>{statistics.average ? statistics.average : 'N/A'}</span>
-            </div>
-            <div className='Statistics__StatsHeader'>
               Today's highest score:{' '}
               <span>{statistics.highest ? statistics.highest : 'N/A'}</span>
+            </div>
+            <div className='Statistics__StatsHeader'>
+              Today's average score:{' '}
+              <span>{statistics.average ? statistics.average : 'N/A'}</span>
             </div>
 
             <div className='Statistics__Separator' />
