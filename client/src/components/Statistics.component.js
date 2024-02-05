@@ -6,6 +6,7 @@ function Statistics({ day, gameEnded }) {
   const [statistics, setStatistics] = useState(null);
   const [saveData, setSaveData] = useState(null);
   const [highScores, setHighScores] = useState(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     async function loadStats() {
@@ -20,8 +21,35 @@ function Statistics({ day, gameEnded }) {
   }, [day, gameEnded]);
 
   const copyReultToClipboard = () => {
-    const text = `Boggdle ${day}\nhttps://simenmh.com/boggdle\n\nScore: ${saveData['score']}\n1. ${saveData['guesses'][0]['word']} (+${saveData['guesses'][0]['points']})\n2. ${saveData['guesses'][1]['word']} (+${saveData['guesses'][1]['points']})\n3. ${saveData['guesses'][2]['word']} (+${saveData['guesses'][2]['points']})`;
+    const introText = `Boggdle ${day}\nhttps://simenmh.com/boggdle\n\n`;
+    const highestScoreText = `I just beat today's highest score! 🔥\n\n`;
+    const scoreText = `Score: ${saveData['score']}\n1. ${saveData['guesses'][0]['word']} (+${saveData['guesses'][0]['points']})\n2. ${saveData['guesses'][1]['word']} (+${saveData['guesses'][1]['points']})\n3. ${saveData['guesses'][2]['word']} (+${saveData['guesses'][2]['points']})`;
+
+    let text = '';
+    text += introText;
+    if (!statistics.highest || saveData['score'] >= statistics.highest)
+      text += highestScoreText;
+    text += scoreText;
     navigator.clipboard.writeText(text);
+  };
+
+  const onCopyResultToClipboard = () => {
+    copyReultToClipboard();
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 1000);
+  };
+
+  const getFinalScoreText = () => {
+    const score = saveData['score'];
+    if (score <= 0) {
+      return 'Better luck next time...';
+    }
+    if (!statistics.highest || score >= statistics.highest) {
+      return "Congratulations! You beat today's highest score!";
+    }
+    return 'Well done! Your final score is:';
   };
 
   return (
@@ -31,22 +59,26 @@ function Statistics({ day, gameEnded }) {
           <>
             {/* FINAL SCORE */}
             {saveData && (
-              <div className='Statistics__FinalScore'>
-                Well done! Your final score is: <span>{saveData['score']}</span>
-              </div>
+              <>
+                <div className='Statistics__FinalScore'>
+                  {getFinalScoreText()}
+                  <span>{saveData['score']}</span>
+                </div>
+                {/* COPY TO CLIPBOARD */}
+                <div className='Statistics__ButtonContainer'>
+                  <div
+                    className='Statistics__Button'
+                    onClick={onCopyResultToClipboard}
+                  >
+                    {copied
+                      ? 'Copied to clipboard!'
+                      : 'Copy Results to Clipboard'}
+                  </div>
+                </div>
+
+                <div className='Statistics__Separator' />
+              </>
             )}
-
-            {/* COPY TO CLIPBOARD */}
-            <div className='Statistics__ButtonContainer'>
-              <div
-                className='Statistics__Button'
-                onClick={copyReultToClipboard}
-              >
-                Copy Results to Clipboard
-              </div>
-            </div>
-
-            <div className='Statistics__Separator' />
 
             {/* HIGH SCORE */}
             {highScores && highScores['score'] !== 0 && (
@@ -64,6 +96,10 @@ function Statistics({ day, gameEnded }) {
                 </span>
               </div>
             )}
+            {highScores &&
+              (highScores['word']['word'] || highScores['score'] !== 0) && (
+                <div className='Statistics__Separator' />
+              )}
           </>
         )}
         {/* STATISTICS */}
@@ -71,8 +107,6 @@ function Statistics({ day, gameEnded }) {
           <>
             {gameEnded && (
               <>
-                <div className='Statistics__Separator' />
-
                 <div className='Statistics__StatsHeader'>
                   Today's best possible solution:
                 </div>
@@ -100,12 +134,17 @@ function Statistics({ day, gameEnded }) {
                     );
                   })}
                 </div>
-
-                <div className='Statistics__Separator' />
               </>
             )}
+            <div className='Statistics__Separator' />
+
             <div className='Statistics__StatsHeader'>
-              Today's average score: <span>{statistics.average}</span>
+              Today's average score:{' '}
+              <span>{statistics.average ? statistics.average : 'N/A'}</span>
+            </div>
+            <div className='Statistics__StatsHeader'>
+              Today's highest score:{' '}
+              <span>{statistics.highest ? statistics.highest : 'N/A'}</span>
             </div>
 
             <div className='Statistics__Separator' />

@@ -84,7 +84,9 @@ const getStatistics = asyncHandler(async (req, res) => {
     filteredScore.reduce((a, b) => a + b, 0) / filteredScore.length
   );
 
-  res.status(200).json({ best, popular, average });
+  const highest = Math.max(...filteredScore);
+
+  res.status(200).json({ best, popular, average, highest });
 });
 
 // Helpers

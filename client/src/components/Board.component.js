@@ -118,10 +118,10 @@ function Board({ boardSize }) {
   }, [table]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const renderLives = () => {
-    const livesArr = ['♡', '♡', '♡'];
+    const livesArr = ['♡ ', '♡ ', '♡ '];
 
     for (let i = 0; i < livesArr.length; i++) {
-      if (i < lives) livesArr[i] = '❤︎';
+      if (i < lives) livesArr[i] = '❤︎ ';
     }
 
     return livesArr;
