@@ -43,7 +43,7 @@ function App() {
         appElement={document.getElementById('root')}
       >
         <h2>How To Play</h2>
-        <h3>Find the highest scoring words on the grid in 3 guesses</h3>
+        <h3>Get a score based on the 3 best words you can find on the grid</h3>
         <div className='Modal__Close' onClick={closeHelpModal}></div>
         <ul className='Modal__Tutorial'>
           <li>
