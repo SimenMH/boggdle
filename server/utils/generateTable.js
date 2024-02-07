@@ -38,7 +38,7 @@ const letterConfig = [
   ['O', 'O', 'O', 'T', 'T', 'U'],
 ];
 
-const MIN_SOLUTIONS = 350;
+const MIN_SOLUTIONS = 450;
 
 export const generateTable = async day => {
   const characters = await getCharacters();
