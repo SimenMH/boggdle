@@ -26,7 +26,7 @@ const submitWord = asyncHandler(async (req, res) => {
   let solution = solutions.Solutions.find(s => s.word === word);
 
   if (!solution) {
-    const foundWord = await findWord(word);
+    const foundWord = await findWord(word, day);
     if (foundWord) {
       await addWord(word);
       solutions = await Solutions.findOne({ Day: day });
