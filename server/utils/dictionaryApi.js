@@ -1,5 +1,4 @@
 import boggle from 'node-boggle-solver';
-import { getDay } from './config.js';
 import Table from '../models/tableModel.js';
 
 import BannedWordList from '../data/bannedWordsList.json' assert { type: 'json' };

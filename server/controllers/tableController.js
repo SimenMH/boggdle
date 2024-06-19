@@ -1,12 +1,12 @@
 import asyncHandler from 'express-async-handler';
 import { getCharacters, getDay } from '../utils/config.js';
-
-import Table from '../models/tableModel.js';
-import Solutions from '../models/solutionsModel.js';
 import { findWord } from '../utils/dictionaryApi.js';
 import { addWord } from '../utils/generateTable.js';
 
-const getTable = asyncHandler(async (req, res) => {
+import Table from '../models/tableModel.js';
+import Solutions from '../models/solutionsModel.js';
+
+const getTable = asyncHandler(async (_req, res) => {
   const table = await getTodaysTable();
   const characterValues = await getCharacters();
 
@@ -38,7 +38,6 @@ const submitWord = asyncHandler(async (req, res) => {
     // Add count to usages of solution
     solution.usages = solution.usages + 1;
     await solutions.save();
-
     res.status(200).json(solution.points);
   } else {
     res.status(200).json(0);
@@ -64,7 +63,7 @@ const submitScore = asyncHandler(async (req, res) => {
   res.sendStatus(201);
 });
 
-const getStatistics = asyncHandler(async (req, res) => {
+const getStatistics = asyncHandler(async (_req, res) => {
   const day = await getDay();
   const scores = (await Table.findOne({ Day: day })).Scores;
   const solutions = (await Solutions.findOne({ Day: day })).Solutions;

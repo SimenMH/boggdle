@@ -117,7 +117,7 @@ export const addWord = async word => {
   const wordListJson = await fs.promises.readFile(
     './data/wordlist.json',
     'utf-8'
-  ); // Specify encoding as an option
+  );
   const wordList = JSON.parse(wordListJson);
   wordList.push(word);
   fs.writeFileSync('./data/wordlist.json', JSON.stringify(wordList, null, 2));
@@ -125,7 +125,7 @@ export const addWord = async word => {
   const filteredWordListJson = await fs.promises.readFile(
     './data/filteredWords.json',
     'utf-8'
-  ); // Specify encoding as an option
+  );
   const filteredWordList = JSON.parse(filteredWordListJson);
   filteredWordList.push(word);
   fs.writeFileSync(

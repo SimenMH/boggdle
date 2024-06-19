@@ -1,10 +1,10 @@
-const PASSWORD = 'abc123';
+const adminAuthKey = process.env.ADMIN_AUTH_KEY;
 
-// Check password
+// Verify password
 export const adminAuth = (req, res, next) => {
-  const { pass } = req.headers;
+  const { AuthKey } = req.headers;
 
-  if (pass !== PASSWORD) {
+  if (AuthKey !== adminAuthKey) {
     res.status(401);
     throw new Error('Unauthorized');
   }

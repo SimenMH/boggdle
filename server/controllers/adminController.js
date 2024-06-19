@@ -1,31 +1,34 @@
 import asyncHandler from 'express-async-handler';
 import { getDay, getNextDay, getCharacters } from '../utils/config.js';
-import { generateTable } from '../utils/generateTable.js';
+import { generateTable, getWordScore } from '../utils/generateTable.js';
+
 import Solutions from '../models/solutionsModel.js';
 import Table from '../models/tableModel.js';
 
 // Regenerate Today's Table
-const regenTable = asyncHandler(async (req, res) => {
+const regenTable = asyncHandler(async (_req, res) => {
   const day = await getDay();
   await generateTable(day);
   res.sendStatus(204);
 });
 
 // Regenerate Tomorrow's Table
-const regenNextTable = asyncHandler(async (req, res) => {
+const regenNextTable = asyncHandler(async (_req, res) => {
   const day = await getNextDay();
   await generateTable(day);
   res.sendStatus(204);
 });
+
 // Get Tomorrow's Table
-const getNextTable = asyncHandler(async (req, res) => {
+const getNextTable = asyncHandler(async (_req, res) => {
   const day = await getNextDay();
   const table = await Table.findOne({ Day: day });
 
   res.status(200).json(table);
 });
+
 // Get Tomorrow's Solutions (number)
-const getNextSolutions = asyncHandler(async (req, res) => {
+const getNextSolutions = asyncHandler(async (_req, res) => {
   const day = await getNextDay();
   const solutions = await Solutions.findOne({ Day: day });
 
@@ -36,7 +39,6 @@ const getNextSolutions = asyncHandler(async (req, res) => {
 const addWord = asyncHandler(async (req, res) => {
   let { word } = req.body;
   const day = await getDay();
-  const characters = await getCharacters();
   const solutions = await Solutions.findOne({ Day: day });
   if (!solutions) {
     res.status(404);
@@ -47,16 +49,11 @@ const addWord = asyncHandler(async (req, res) => {
 
   const wordExists = solutions.Solutions.find(s => s.word === word);
   if (wordExists) {
-    throw new Error('Word already exists in solutions');
     res.status(409);
+    throw new Error('Word already exists in solutions');
   }
 
-  let points = 0;
-  for (let i = 0; i < word.length; i++) {
-    points += characters[word[i]].value;
-  }
-  if (word.length >= 6) points += 5;
-
+  const points = await getWordScore(word);
   solutions.Solutions.push({ word, points });
 
   await solutions.save();
@@ -88,7 +85,7 @@ const removeWord = asyncHandler(async (req, res) => {
 });
 
 // Get all used words
-const getUsedWords = asyncHandler(async (req, res) => {
+const getUsedWords = asyncHandler(async (_req, res) => {
   const day = await getDay();
   const solutions = await Solutions.findOne({ Day: day });
   if (!solutions) {

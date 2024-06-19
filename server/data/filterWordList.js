@@ -1,17 +1,11 @@
-import BannedWordList from './bannedWordsList.json' assert { type: 'json' };
-
 import fs from 'fs';
 
-// Load the profanity array (replace it with your own)
+import BannedWordList from './bannedWordsList.json' assert { type: 'json' };
 
 // Function to filter out profanity words
 function filterProfanity(words) {
   return words.filter(word => {
-    if (!BannedWordList.includes(word.toUpperCase())) {
-      return true;
-    }
-    console.log('removed', word);
-    return false;
+    return !BannedWordList.includes(word.toUpperCase());
   });
 }
 
@@ -31,8 +25,8 @@ function processArray(inputArray) {
 }
 
 // Load the JSON file
-const jsonFilePath = './wordlist.json'; // Replace with your JSON file path
-const jsonData = await fs.promises.readFile(jsonFilePath, 'utf-8'); // Specify encoding as an option
+const jsonFilePath = './wordlist.json';
+const jsonData = await fs.promises.readFile(jsonFilePath, 'utf-8');
 const parsedData = JSON.parse(jsonData);
 
 // Filter out profanity

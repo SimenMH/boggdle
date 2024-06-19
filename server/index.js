@@ -1,10 +1,10 @@
 import './env.js';
 import express from 'express';
-import cors from 'cors';
 import router from './router.js';
-import { notFound, errorHandler } from './middleware/errorMiddleware.js';
+import cors from 'cors';
 import connectDB from './config/db.js';
 import scheduler from './utils/scheduler.js';
+import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import { initConfig } from './utils/config.js';
 
 const app = express();
