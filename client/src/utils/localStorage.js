@@ -66,15 +66,27 @@ export const updateHighScores = data => {
     };
   }
 
-  for (let i = 0; i < data['guesses'].length; i++) {
-    const word = data['guesses'][i];
-    if (word['points'] > highScores['word']['points']) {
-      highScores['word'] = word;
-    }
-  }
+  const localStorageData = { ...localStorage, data };
+  const allDaysData = Object.keys(localStorageData)
+    .filter(key => key[0] === '#')
+    .reduce((obj, key) => {
+      obj[key] = localStorageData[key];
+      return obj;
+    }, {});
 
-  if (data['score'] > highScores['score']) {
-    highScores['score'] = data['score'];
+  for (const key in allDaysData) {
+    const dayData = JSON.parse(allDaysData[key]);
+
+    for (let i = 0; i < dayData['guesses'].length; i++) {
+      const word = dayData['guesses'][i];
+      if (word['points'] > highScores['word']['points']) {
+        highScores['word'] = word;
+      }
+    }
+
+    if (dayData['score'] > highScores['score']) {
+      highScores['score'] = dayData['score'];
+    }
   }
 
   if (validateHighScores(highScores)) {
