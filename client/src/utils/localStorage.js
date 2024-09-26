@@ -56,7 +56,7 @@ export const getHighScores = () => {
 
 export const updateHighScores = data => {
   let highScores = JSON.parse(localStorage.getItem('highscores'));
-  if (!highScores || validateHighScores(highScores)) {
+  if (!highScores || !validateHighScores(highScores)) {
     highScores = {
       word: {
         word: '',
