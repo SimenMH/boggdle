@@ -20,7 +20,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build-scss": "node-sass ./src/css/styles.scss ./src/css/styles.css",
-    "build": "npm run build-scss & react-scripts build && npm run zip",
+    "build": "npm run build-scss & react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "zip": "cd build && rm -f build.zip && zip -r build.zip ."
