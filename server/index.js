@@ -19,7 +19,10 @@ const whitelist = [
 if (process.env.NODE_ENV === 'development') {
   whitelist.push('http://localhost:3000', undefined);
 }
-app.use(
+app.use((req, res, next) => {
+  if (req.path.startsWith('/admin')) {
+    return next();
+  }
   cors({
     origin: (origin, callback) => {
       if (whitelist.indexOf(origin) !== -1) {
@@ -29,8 +32,8 @@ app.use(
       }
     },
     credentials: true,
-  })
-);
+  })(req, res, next);
+});
 
 app.use(express.json());
 
