@@ -8,7 +8,9 @@ import { useState } from 'react';
 const boardSize = 25;
 
 function App() {
-  const [showHelpModal, setShowHelpModal] = useState(true);
+  const [showHelpModal, setShowHelpModal] = useState(
+    () => !localStorage.getItem('helpSeen')
+  );
   const [showCopyrightModal, setShowCopyrightModal] = useState(false);
 
   const openHelpModal = () => {
@@ -16,6 +18,7 @@ function App() {
   };
 
   const closeHelpModal = () => {
+    localStorage.setItem('helpSeen', 'true');
     setShowHelpModal(false);
   };
 

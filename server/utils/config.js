@@ -31,6 +31,6 @@ export const initConfig = async () => {
       Characters: Characters,
     });
 
-    await generateTable(newConfig.Day);
+    await generateTable(`#${newConfig.Day}`);
   }
 };
