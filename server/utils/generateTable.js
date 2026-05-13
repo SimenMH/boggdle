@@ -1,14 +1,10 @@
-import fs from 'fs';
 import boggle from 'node-boggle-solver';
 
 import { getDay, getNextDay, getCharacters } from './config.js';
+import { addToWordlist, getFilteredWordList } from '../data/wordlist.js';
 
 import Table from '../models/tableModel.js';
 import Solutions from '../models/solutionsModel.js';
-
-import WordList from '../data/filteredWords.json' assert { type: 'json' };
-
-const defaultSolver = boggle(WordList);
 
 const letterConfig = [
   ['A', 'A', 'A', 'F', 'R', 'S'],
@@ -42,6 +38,8 @@ const MIN_SOLUTIONS = 450;
 
 export const generateTable = async day => {
   const characters = await getCharacters();
+  const wordList = await getFilteredWordList();
+  const solver = boggle(wordList);
 
   let characterArr = [];
 
@@ -63,7 +61,7 @@ export const generateTable = async day => {
   await Table.findOneAndDelete({ Day: day });
   const table = await Table.create({ Day: day, Characters: tableString });
 
-  defaultSolver.solve(table.Characters, async (err, res) => {
+  solver.solve(table.Characters, async (err, res) => {
     const solutions = [];
 
     for (let word of res.list) {
@@ -114,24 +112,7 @@ export const addWord = async word => {
   solutions.Solutions.push({ word, points });
   await solutions.save();
 
-  const wordListJson = await fs.promises.readFile(
-    './data/wordlist.json',
-    'utf-8'
-  );
-  const wordList = JSON.parse(wordListJson);
-  wordList.push(word);
-  fs.writeFileSync('./data/wordlist.json', JSON.stringify(wordList, null, 2));
-
-  const filteredWordListJson = await fs.promises.readFile(
-    './data/filteredWords.json',
-    'utf-8'
-  );
-  const filteredWordList = JSON.parse(filteredWordListJson);
-  filteredWordList.push(word);
-  fs.writeFileSync(
-    './data/filteredWords.json',
-    JSON.stringify(filteredWordList, null, 2)
-  );
+  await addToWordlist(word);
 };
 
 export const getWordScore = async word => {

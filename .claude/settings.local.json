@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node utils/addOffensiveWords.js)",
+      "Bash(node data/filterWordList.js)"
+    ]
+  }
+}

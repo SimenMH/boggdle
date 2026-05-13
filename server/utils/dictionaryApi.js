@@ -1,12 +1,12 @@
 import boggle from 'node-boggle-solver';
 import Table from '../models/tableModel.js';
 
-import BannedWordList from '../data/bannedWordsList.json' assert { type: 'json' };
+import { isBanned } from '../data/wordlist.js';
 
 const url = 'https://api.dictionaryapi.dev/api/v2/entries/en/';
 
 export const findWord = async (word, day) => {
-  if (BannedWordList.includes(word.toUpperCase())) return false;
+  if (isBanned(word)) return false;
   if ((await verifyWordInTable(word, day)) === false) return false;
 
   const res = await fetch(url + word);

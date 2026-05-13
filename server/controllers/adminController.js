@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import { getDay, getNextDay, getCharacters } from '../utils/config.js';
 import { generateTable, getWordScore } from '../utils/generateTable.js';
+import { addToWordlist, removeFromWordlist } from '../data/wordlist.js';
 
 import Solutions from '../models/solutionsModel.js';
 import Table from '../models/tableModel.js';
@@ -55,8 +56,10 @@ const addWord = asyncHandler(async (req, res) => {
 
   const points = await getWordScore(word);
   solutions.Solutions.push({ word, points });
-
   await solutions.save();
+
+  await addToWordlist(word);
+
   res.sendStatus(200);
 });
 
@@ -77,11 +80,14 @@ const removeWord = asyncHandler(async (req, res) => {
     const index = solutions.Solutions.indexOf(wordExists);
     solutions.Solutions.splice(index, 1);
     await solutions.save();
-    res.sendStatus(200);
   } else {
     res.status(404);
     throw new Error('Word does not exist in solutions');
   }
+
+  await removeFromWordlist(word);
+
+  res.sendStatus(200);
 });
 
 // Get all used words
