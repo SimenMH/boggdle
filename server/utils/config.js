@@ -1,4 +1,4 @@
-import Characters from '../data/characters.json' assert { type: 'json' };
+import Characters from '../data/characters.json' with { type: 'json' };
 import Config from '../models/configModel.js';
 import { generateTable } from './generateTable.js';
 
