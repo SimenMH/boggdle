@@ -5,8 +5,11 @@ import { isBanned } from '../data/wordlist.js';
 
 const url = 'https://api.dictionaryapi.dev/api/v2/entries/en/';
 const API_TIMEOUT_MS = 3000;
+// Disabled by default due to dictionaryapi.dev outages; set DICTIONARY_API_ENABLED=true to re-enable
+const API_ENABLED = process.env.DICTIONARY_API_ENABLED === 'true';
 
 export const findWord = async (word, day) => {
+  if (!API_ENABLED) return false;
   if (isBanned(word)) return false;
   if ((await verifyWordInTable(word, day)) === false) return false;
 
